@@ -1,0 +1,76 @@
+{
+  "name": "@whoj/box-vue",
+  "type": "module",
+  "version": "1.0.0-beta.0",
+  "packageManager": "pnpm@8.3.1",
+  "description": "Box Ui Elements as Vue (2 & 3) Component",
+  "keywords": [
+    "box",
+    "vue",
+    "vue 3",
+    "box ui elements",
+    "vue box ui elements"
+  ],
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "develop": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./*": {
+      "develop": "./src/*/index.ts",
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.mjs",
+      "require": "./dist/*.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    ">=5.0": {
+      "*": [
+        "./dist/index.d.ts"
+      ],
+      "content-explorer": [
+        "./dist/content-explorer.d.ts"
+      ],
+      "content-preview": [
+        "./dist/content-preview.d.ts"
+      ]
+    },
+    "<=4.9": {
+      "*": [
+        "./dist/index.d.ts",
+        "./dist/*"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "vue": "^3.2.47",
+    "@unhead/vue": "^1.1.26",
+    "@vueuse/core": "^9 || ^10",
+    "@whoj/boxdk": "^1.0.0-beta.7"
+  },
+  "peerDependenciesMeta": {
+    "@whoj/boxdk": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "vue-demi": "^0.14.0",
+    "@whoj/utils": "^1.7.4"
+  },
+  "scripts": {
+    "dev": "pnpm run build --mode development --watch",
+    "stub": "unbuild --ctub",
+    "build": "vite build --config vite.config.ts",
+    "typecheck": "vue-tsc --noEmit",
+    "prepublishOnly": "rm -rf dist && pnpm run build"
+  }
+}

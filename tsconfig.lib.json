@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "customConditions": ["develop"],
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "node",
+      "unplugin-vue-macros/macros-global"
+    ]
+  },
+  "exclude": ["dist", "node_modules"]
+}

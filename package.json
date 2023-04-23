@@ -1,0 +1,79 @@
+{
+  "name": "@whoj/box-vue-monorepo",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@8.3.1",
+  "scripts": {
+    "prepack": "nuxt-module-build",
+    "dev": "tsx build.ts",
+    "dev:vue": "pnpm -C packages/vue run dev",
+    "dev:nuxt": "pnpm -C packages/nuxt run dev",
+    "dev:build": "nuxi build playground",
+    "dev:prepare": "nuxt-module-build --stub && nuxi prepare playground",
+    "play": "run-p dev:vue play:vite",
+    "play:vite": "vite examples/vue-vite",
+    "release": "pnpm lint:fix && changelogen --release && pnpm -r publish && git push --follow-tags",
+    "lint": "eslint \"{packages/**/*,*}.{js,ts,tsx,vue}\"",
+    "lint:fix": "pnpm run lint --fix",
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "devDependencies": {
+    "@nuxt/eslint-config": "^0.1.1",
+    "@nuxt/test-utils": "^3.4.2",
+    "@types/fs-extra": "^11.0.1",
+    "@types/node": "^18.15.13",
+    "@vue/tsconfig": "^0.2.0",
+    "@vueuse/core": "^10.0.2",
+    "@whoj/box-nuxt": "workspace:^",
+    "@whoj/box-vue": "workspace:^",
+    "@whoj/boxdk": "^1.0.0-beta.7",
+    "@whoj/eslint-config": "^1.4.0",
+    "@whoj/utils": "^1.7.4",
+    "box-ui-elements": "^17.0.0",
+    "changelogen": "^0.5.3",
+    "citty": "^0.1.1",
+    "eslint": "^8.39.0",
+    "npm-run-all": "^4.1.5",
+    "terser": "^5.17.1",
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.4",
+    "unplugin-vue": "^4.1.0",
+    "unplugin-vue-macros": "^2.0.0",
+    "vite": "^4.3.1",
+    "vite-plugin-dts": "^2.3.0",
+    "vitest": "^0.30.1",
+    "vue": "^3.2.47",
+    "vue-tsc": "^1.4.2"
+  },
+  "pnpm": {
+    "allowedDeprecatedVersions": {
+      "popper.js": "*",
+      "@hapi/address": "*",
+      "@formatjs/intl-utils": "*",
+      "intl-messageformat-parser": "*",
+      "@formatjs/intl-unified-numberformat": "*"
+    },
+    "overrides": {
+      "core-js": "^3.30.0",
+      "vue-demi": "^0.14.0",
+      "typescript": "$typescript",
+      "@whoj/utils": "$@whoj/utils",
+      "sourcemap-codec": "npm:@jridgewell/sourcemap-codec@^1.4"
+    },
+    "peerDependencyRules": {
+      "allowAny": [
+        "sass",
+        "react",
+        "react-dom",
+        "sanitize-html",
+        "@hapi/address"
+      ],
+      "ignoreMissing": [
+        "@vue/*",
+        "@vueuse/*"
+      ]
+    }
+  },
+  "repository": "who-jonson/box-vue"
+}

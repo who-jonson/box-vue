@@ -1,0 +1,8 @@
+{
+  "root": true,
+  "extends": ["@nuxt/eslint-config", "@whoj"],
+  "rules": {
+    "import/order": "off",
+    "vue/define-macros-order": "off"
+  }
+}
