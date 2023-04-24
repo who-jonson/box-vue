@@ -12,7 +12,7 @@
     "dev:prepare": "nuxt-module-build --stub && nuxi prepare playground",
     "play": "run-p dev:vue play:vite",
     "play:vite": "vite examples/vue-vite",
-    "release": "pnpm lint:fix && changelogen --release && pnpm -r publish && git push --follow-tags",
+    "release": "pnpm lint:fix && bumpp packages/*/package.json --commit --push --tag && pnpm -r publish --access public",
     "lint": "eslint \"{packages/**/*,*}.{js,ts,tsx,vue}\"",
     "lint:fix": "pnpm run lint --fix",
     "test": "vitest run",
