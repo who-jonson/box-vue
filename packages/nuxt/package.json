@@ -63,5 +63,9 @@
     "type": "github",
     "directory": "packages/nuxt",
     "url": "https://github.com/who-jonson/box-vue"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
   }
 }

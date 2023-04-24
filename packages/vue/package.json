@@ -72,5 +72,14 @@
     "build": "vite build --config vite.config.ts",
     "typecheck": "vue-tsc --noEmit",
     "prepublishOnly": "rm -rf dist && pnpm run build"
+  },
+  "repository": {
+    "type": "github",
+    "directory": "packages/nuxt",
+    "url": "https://github.com/who-jonson/box-vue"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
   }
 }

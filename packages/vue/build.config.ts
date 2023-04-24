@@ -25,7 +25,6 @@ export default defineBuildConfig({
   ],
   hooks: {
     'rollup:options': async (ctx, options) => {
-      console.log(options.output);
       // @ts-ignore
       options.plugins.push(
         Macros({
