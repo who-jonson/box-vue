@@ -4,12 +4,8 @@
   "type": "module",
   "packageManager": "pnpm@8.3.1",
   "scripts": {
-    "prepack": "nuxt-module-build",
-    "dev": "tsx build.ts",
     "dev:vue": "pnpm -C packages/vue run dev",
     "dev:nuxt": "pnpm -C packages/nuxt run dev",
-    "dev:build": "nuxi build playground",
-    "dev:prepare": "nuxt-module-build --stub && nuxi prepare playground",
     "play": "run-p dev:vue play:vite",
     "play:vite": "vite examples/vue-vite",
     "release": "pnpm lint:fix && bumpp packages/*/package.json --commit --push --tag && pnpm -r publish --access public",
