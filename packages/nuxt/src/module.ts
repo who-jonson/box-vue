@@ -11,6 +11,11 @@ export interface BoxNuxtOptions {
 
 const configKey = 'boxVue' as const;
 
+const defaultComponents = <BoxNuxtOptions['components']>{
+  ContentExplorer: true,
+  ContentPreview: true
+};
+
 export default defineNuxtModule<BoxNuxtOptions>({
   meta: {
     name,
@@ -22,14 +27,7 @@ export default defineNuxtModule<BoxNuxtOptions>({
     }
   },
 
-  defaults: {
-    components: {
-      ContentExplorer: true,
-      ContentPreview: true
-    }
-  },
-
-  setup({ components }, nuxt) {
+  setup({ components = defaultComponents }, nuxt) {
     nuxt.hook('components:extend', (_components) => {
       objectEntries(components!).forEach(([name, value]) => {
         if (value) {
