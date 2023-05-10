@@ -1,8 +1,13 @@
 {
   "root": true,
-  "extends": ["@nuxt/eslint-config", "@whoj"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "extends": ["@whoj"],
   "rules": {
     "import/order": "off",
-    "vue/define-macros-order": "off"
+    "vue/define-macros-order": "off",
+    "vue/require-explicit-emits": "off"
   }
 }

@@ -2,9 +2,11 @@
   "compilerOptions": {
     "composite": true,
     "module": "ESNext",
+    "jsx": "preserve",
+    "jsxFactory": "h",
     "moduleResolution": "Node",
     "customConditions": ["develop"],
     "allowSyntheticDefaultImports": true
   },
-  "include": ["build.ts", "tsup.config.ts", "vite.config.ts"]
+  "include": ["build.ts", "tsup.config.ts", "vite.config.ts", "scripts"]
 }

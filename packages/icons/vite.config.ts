@@ -3,8 +3,8 @@ import Vue from '@vitejs/plugin-vue';
 import ViteDts from 'vite-plugin-dts';
 import VueJsx from '@vitejs/plugin-vue-jsx';
 import type { OutputOptions } from 'rollup';
-import { fixImportHellVite } from './../../scripts/check.js';
-import { entry, getExternals, makeBanner, r } from '../../scripts/utils';
+import Macros from 'unplugin-vue-macros/vite';
+import { getExternals, makeBanner, r } from '../../scripts/utils';
 
 export default defineConfig(({ command, mode }) => {
   const isDev = (command === 'serve' || process.env.DEV || mode !== 'production');
@@ -12,7 +12,7 @@ export default defineConfig(({ command, mode }) => {
     build: {
       emptyOutDir: false,
       outDir: 'dist',
-      minify: false,
+      minify: !isDev,
       lib: {
         entry: './src/index.ts'
       },
@@ -30,31 +30,33 @@ export default defineConfig(({ command, mode }) => {
       'import.meta.DEV': JSON.stringify(process.env.DEV)
     },
     esbuild: {
+      target: 'ES2022',
       legalComments: 'eof',
       treeShaking: true
     },
 
     plugins: [
-      Vue({
-        isProduction: false,
-        reactivityTransform: true
+      Macros({
+        plugins: {
+          vue: Vue({
+            isProduction: false,
+            reactivityTransform: true
+          }),
+          vueJsx: VueJsx()
+        }
       }),
-      VueJsx(),
-      // ReactivityTransform(),
       ViteDts({
         cleanVueFileName: true,
         skipDiagnostics: true,
-        // rollupTypes: true,
+        rollupTypes: true,
         noEmitOnError: false,
-        outputDir: r('dist/types'),
         entryRoot: 'src',
         tsConfigFilePath: r('../../tsconfig.lib.json'),
         compilerOptions: {
           composite: false,
           customConditions: ['develop']
         }
-      }),
-      fixImportHellVite()
+      })
     ],
     resolve: {
       conditions: ['develop', 'module', 'import', 'default']
@@ -74,13 +76,12 @@ function outputOptions(format: 'cjs' | 'es' = 'es'): OutputOptions {
       constBindings: true
     },
     minifyInternalExports: false,
-    chunkFileNames: `[name].${format === 'es' ? 'mjs' : 'cjs'}`, // ({ isEntry }) => `${isEntry ? '' : '_shared/'}box-vue.[hash].${format === 'es' ? 'mjs' : 'cjs'}`,
+    chunkFileNames: `_shared/[name].${format === 'es' ? 'mjs' : 'cjs'}`,
     entryFileNames: `[name].${format === 'es' ? 'mjs' : 'cjs'}`,
     manualChunks: (id) => {
-      if (/src\/components\/([\w-]+)\/index\.ts/.test(id)) {
-        return /src\/components\/([\w-]+)\//.exec(id)[1];
+      if (/src\/([\w-]+)\//.test(id)) {
+        return /src\/([\w-]+)\//.exec(id)[1];
       }
-      return '_/shared';
     }
   };
 }
