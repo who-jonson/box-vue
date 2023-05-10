@@ -7,18 +7,27 @@
     "moduleResolution": "Bundler",
     "strict": true,
     "jsx": "preserve",
+    "jsxFactory": "h",
     "customConditions": ["develop"],
     "resolveJsonModule": true,
     "isolatedModules": true,
     "esModuleInterop": true,
+    "experimentalDecorators": true,
     "lib": ["ES5", "ESNext", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
     "noEmit": true,
     "types": [
       "node",
-      "vite/client",
-      "unplugin-vue-macros/macros-global"
-    ]
+      "vite/client"
+    ],
+    "paths": {
+      "@scripts/*": [
+        "./scripts/*.ts"
+      ],
+      "box-icons/*": [
+        "./packages/icons/src/*"
+      ]
+    }
   },
   "references": [
     { "path": "./tsconfig.node.json" },

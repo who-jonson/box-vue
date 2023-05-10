@@ -1,6 +1,7 @@
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import Vue from '@vitejs/plugin-vue';
+import VueJsx from '@vitejs/plugin-vue-jsx';
 import Macros from 'unplugin-vue-macros/vite';
 
 export default defineConfig({
@@ -14,7 +15,8 @@ export default defineConfig({
       plugins: {
         vue: Vue({
           reactivityTransform: true
-        })
+        }),
+        vueJsx: VueJsx()
       }
     })
   ],

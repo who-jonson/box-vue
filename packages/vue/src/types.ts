@@ -1,29 +1,26 @@
+import type { ArgumentsType, Func } from '@whoj/utils';
+
+export type File = UnObj;
+export type Folder = UnObj;
+export type WebLink = UnObj;
+
 export type TokenGenerator = () => string | Promise<string>;
+
+export interface CdnOption {
+  js: string;
+  css: string;
+}
+
+export type ExtractComponentProps<TComponent> =
+  TComponent extends new () => {
+    $props: infer P
+  }
+    ? P
+    : never;
 
 export type UnObj<T extends object = {}> = T & {
   [p: string]: any
 };
-
-export interface CommonOptions {
-  /**
-   * Custom CDN links to use for specific element/component
-   */
-  cdn?: {
-    js: string,
-    css: string
-  };
-
-  /**
-   * Version of box-ui-elements to use.
-   * It will have no effect when using custom cdn links
-   */
-  version?: string;
-
-  /**
-   * Whether to dispose the Head on unmount
-   */
-  disposeOnUnmount?: boolean;
-}
 
 export interface BoxUiOptions {
   /**
@@ -47,4 +44,62 @@ export interface BoxUiOptions {
    * If this value is the string box then the box logo will show
    */
   logoUrl?: string;
+
+  [p: string]: any;
 }
+
+export interface BaseEl<T extends Record<string, any>, _Events extends { [p: string]: Func<any, void> } = {}> {
+  /**
+   *
+   * @public
+   * @param {string} id - File/Folder ID to preview
+   * @param {string|TokenGenerator} accessToken - Box API access token
+   * @param {object} [options] - Options
+   *
+   * @return {void}
+   */
+  show(id: string, accessToken: string | TokenGenerator, options?: T): void;
+
+  /**
+   * Hides the preview.
+   *
+   * @return {void}
+   */
+  hide(): void;
+
+  /**
+   * Adds an event listener. Listeners should be added
+   * before calling show() so no events are missed.
+   *
+   * @param {string} eventName - Name of the event
+   * @param {Func<any, void>} listener - Callback function
+   * @return {void}
+   */
+  addListener<_Event extends keyof _Events>(eventName: _Event, listener: Func<ArgumentsType<_Events[_Event]>[0], void>): void;
+
+  /**
+   * Removes an event listener
+   *
+   * @param {string} eventName - Name of the event
+   * @param {Func<any, void>} listener - Callback function
+   * @return {void}
+   */
+  removeListener<_Event extends keyof _Events>(eventName: _Event, listener: Func<ArgumentsType<_Events[_Event]>[0], void>): void;
+
+  /**
+   * Removes all event listeners from the el.
+   *
+   * @return {void}
+   */
+  removeAllListeners(): void;
+
+  [p: string]: any;
+}
+
+export type MapToReturnVoid<T extends { [p: string]: Func<any, boolean> }> = {
+  [K in keyof T]: (...args: ArgumentsType<T[K]>) => void
+};
+
+export type MaybePromise<T> = Promise<T> | PromiseLike<T> | T;
+
+export type BoxComponent = 'ContentExplorer' | 'ContentPreview';

@@ -1,0 +1,139 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JetBrains/web-types/master/schema/web-types.json",
+  "framework": "vue",
+  "name": "@whoj/box-vue",
+  "version": "1.0.0-beta.2",
+  "js-types-syntax": "typescript",
+  "description-markup": "markdown",
+  "framework-config": {
+    "enable-when": {
+      "file-extensions": [
+        "vue",
+        "tsx",
+        "ts"
+      ]
+    }
+  },
+  "contributions": {
+    "html": {
+      "vue-components": [
+        {
+          "name": "ContentPreview",
+          "source": {
+            "module": "@whoj/box-vue",
+            "symbol": "ContentPreview"
+          },
+          "description": "Content Preview Component",
+          "props": [
+            {
+              "name": "value",
+              "type": "string",
+              "required": true
+            },
+            {
+              "name": "accessToken",
+              "required": true,
+              "type": "string",
+              "description": "Auth Access Token to use for request"
+            },
+            {
+              "name": "cdn",
+              "type": {
+                "module": "@whoj/box-vue",
+                "name": "CdnOption"
+              },
+              "required": false,
+              "description": "Custom CDN links to use for specific element/component"
+            },
+            {
+              "name": "options",
+              "type": {
+                "module": "@whoj/box-vue",
+                "name": "PreviewOptions"
+              },
+              "default": "\"{}\"",
+              "description": "Options"
+            },
+            {
+              "name": "version",
+              "type": "string",
+              "required": false,
+              "description": "Version of box-ui-elements to use.\nIt will have no effect when using custom cdn links"
+            },
+            {
+              "name": "height",
+              "type": "string",
+              "description": "Whether to dispose the Head on unmount",
+              "default": "'500px'"
+            },
+            {
+              "name": "disposeOnUnmount",
+              "description": "Whether to dispose the Head on unmount",
+              "type": "boolean",
+              "default": "true"
+            }
+          ]
+        }
+      ]
+    },
+    "js": {
+      "vue-components": [
+        {
+          "name": "ContentPreview",
+          "virtual": true,
+          "source": {
+            "module": "@whoj/box-vue",
+            "symbol": "ContentPreview"
+          },
+          "events": [
+            {
+              "name": "load",
+              "arguments": [
+                {
+                  "name": "data",
+                  "type": "object"
+                }
+              ]
+            },
+            {
+              "name": "viewer",
+              "arguments": [
+                {
+                  "name": "data",
+                  "type": "object"
+                }
+              ]
+            },
+            {
+              "name": "navigate",
+              "arguments": [
+                {
+                  "name": "data",
+                  "type": "object"
+                }
+              ]
+            },
+            {
+              "name": "notification",
+              "arguments": [
+                {
+                  "name": "data",
+                  "type": "object"
+                }
+              ]
+            },
+            {
+              "name": "viewerevent",
+              "arguments": [
+                {
+                  "name": "data",
+                  "type": "object"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

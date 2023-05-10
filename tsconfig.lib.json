@@ -3,13 +3,17 @@
     "composite": true,
     "target": "ES2022",
     "module": "ESNext",
+    "jsx": "preserve",
+    "jsxFactory": "h",
     "moduleResolution": "Bundler",
     "customConditions": ["develop"],
+    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "types": [
-      "node",
-      "unplugin-vue-macros/macros-global"
-    ]
+    "paths": {
+      "box-icons/*": [
+        "./packages/icons/src/*"
+      ]
+    }
   },
   "exclude": ["dist", "node_modules"]
 }

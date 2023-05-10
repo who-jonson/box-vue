@@ -8,10 +8,3 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
-
-declare module '*.vue' {
-  import { DefineComponent } from "vue-demi";
-  const component: DefineComponent;
-
-  export default component;
-}

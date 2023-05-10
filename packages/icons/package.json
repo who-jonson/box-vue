@@ -1,41 +1,44 @@
 {
-  "name": "@whoj/box-vue",
+  "name": "@whoj/box-icons",
   "type": "module",
   "version": "1.0.0-beta.2",
   "packageManager": "pnpm@8.3.1",
-  "description": "Box Ui Elements as Vue (2 & 3) Component",
+  "description": "Box Ui Elements (Icons) as Vue (2 & 3) Component",
   "keywords": [
     "box",
     "vue",
     "vue 3",
     "box ui elements",
+    "box ui icons",
     "vue box ui elements"
   ],
   "license": "MIT",
   "exports": {
     ".": {
+      "develop": "./src/index.ts",
       "types": "./dist/index.d.ts",
-      "node": {
-        "import": "./dist/index.mjs",
-        "require": "./dist/index.cjs"
-      },
-      "default": "./dist/index.mjs"
+      "default": "./dist/index.js"
+    },
+    "./fill": {
+      "types": "./dist/fill/index.d.ts",
+      "default": "./dist/fill/index.js"
+    },
+    "./line": {
+      "types": "./dist/line/index.d.ts",
+      "default": "./dist/line/index.js"
+    },
+    "./logo": {
+      "types": "./dist/logo/index.d.ts",
+      "default": "./dist/logo/index.js"
     },
     "./*": [
       "./dist/*",
       "./dist/*.d.ts"
     ]
   },
-  "main": "./dist/index.mjs",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "web-types": "./web-types.json",
   "typesVersions": {
-    ">=5.0": {
-      "*": [
-        "./dist/index.d.ts"
-      ]
-    },
     "<=4.9": {
       "*": [
         "./dist/index.d.ts",
@@ -48,34 +51,33 @@
   ],
   "peerDependencies": {
     "vue": "^3.2.47",
-    "@unhead/vue": "^1.1.26",
-    "@vueuse/core": "^9 || ^10",
-    "@whoj/boxdk": "^1.0.0-beta.7"
+    "unplugin-vue-components": "^0.24.0"
   },
   "peerDependenciesMeta": {
-    "@whoj/boxdk": {
+    "unplugin-vue-components": {
       "optional": true
     }
   },
   "dependencies": {
-    "vue-demi": "^0.14.1",
-    "@whoj/utils": "^1.7.4"
+    "vue-demi": "^0.14.1"
   },
   "scripts": {
     "dev": "pnpm run build --mode development --watch",
-    "stub": "unbuild --stub",
-    "build": "rollup --config rollup.config.js",
-    "build:types": "vue-docgen-web-types --configFile web-types.config.json",
+    "stub": "unbuild --ctub",
+    "build": "cross-env \"NODE_OPTIONS=--max_old_space_size=6096\" rollup --config rollup.config.js",
+    "prepare:icon": "tsx ./scripts/prepare.ts",
     "typecheck": "vue-tsc --noEmit",
     "prepublishOnly": "rm -rf dist && pnpm run build"
   },
   "repository": {
     "type": "github",
-    "directory": "packages/nuxt",
+    "directory": "packages/icons",
     "url": "https://github.com/who-jonson/box-vue"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
-    "access": "public"
+    "access": "public",
+    "directory": "dist",
+    "linkDirectory": true
   }
 }

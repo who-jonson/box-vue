@@ -1,40 +1,9 @@
-import fs from 'fs-extra';
-import glob from 'fast-glob';
-import { resolve } from 'path';
 import { defineConfig } from 'tsup';
 import type { Options } from 'tsup';
 import Vue from 'unplugin-vue/esbuild';
-import { objectKeys, uniq } from '@whoj/utils';
+import { entry, getExternals, makeBanner, name } from './utils';
 
-export const r = (...p: string[]) => resolve(process.cwd(), ...p);
-
-export const { dependencies, name, peerDependencies, version } = fs.readJSONSync(r('package.json'), 'utf8');
-
-export function makeBanner() {
-  return `/**
- * @module ${name}
- * @version  ${version}
- * @copyright ${(new Date()).getFullYear()} Jonson B. All rights reserved.
- */
-`;
-}
-
-export const getExternals = () => uniq<string | RegExp>([
-  ...objectKeys<Record<string, string>>({ ...(dependencies || {}), ...(peerDependencies || {}) }),
-  /^@whoj\/utils/,
-  /#box-ui-elements\//
-]);
-
-export const entry = glob.sync(['*/index.ts'], {
-  absolute: false,
-  cwd: r('./src'),
-  ignore: ['utils/index.ts']
-}).reduce<Record<string, string>>((entries, input) => ({
-  ...entries,
-  [input.substring(0, input.indexOf('/'))]: `./src/${input}`
-}), { index: './src/index.ts' });
-
-const formats = ['cjs', 'esm', 'iife'] as const;
+const formats = ['cjs', 'esm'] as const;
 
 export default defineConfig(formats.reduce<Options[]>((options, format) => {
   const isEsm = format === 'esm';
@@ -46,7 +15,7 @@ export default defineConfig(formats.reduce<Options[]>((options, format) => {
       clean: false,
       outDir: 'dist',
       external: getExternals(),
-      watch: !!process.env.DEV,
+      watch: process.env.DEV,
       banner: {
         js: makeBanner()
       },
@@ -58,8 +27,7 @@ export default defineConfig(formats.reduce<Options[]>((options, format) => {
       platform: !isNode ? 'browser' : 'node',
       define: {
         'import.meta.vitest': 'undefined',
-        'import.meta.VITE_BOX_VUE_DEV_TOKEN': 'undefined',
-        'import.meta.DEV': JSON.stringify(process.env.DEV)
+        'import.meta.VITE_BOX_VUE_DEV_TOKEN': 'undefined'
       },
       loader: {
         '.vue': 'ts'
@@ -78,7 +46,7 @@ export default defineConfig(formats.reduce<Options[]>((options, format) => {
         options.outExtension = {
           '.js': isEsm
             ? '.mjs'
-            : (format === 'iife' ? '.global.js' : '.cjs')
+            : '.cjs'
         };
         options.resolveExtensions = [
           '.ts',

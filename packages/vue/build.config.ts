@@ -1,9 +1,9 @@
+import fs from 'fs-extra';
 import Vue from 'unplugin-vue/rollup';
 import { defineBuildConfig } from 'unbuild';
 import type { OutputOptions } from 'rollup';
 import { flattenArrayable } from '@whoj/utils';
-import Macros from 'unplugin-vue-macros/rollup';
-import { getExternals, makeBanner } from './tsup.config';
+import { getExternals, makeBanner, r } from '../../scripts/utils';
 
 export default defineBuildConfig({
   clean: false,
@@ -14,26 +14,20 @@ export default defineBuildConfig({
     emitCJS: true,
     cjsBridge: true,
     esbuild: {
-      target: 'ES2022',
+      target: 'ESNext',
       legalComments: 'eof'
     }
   },
   entries: [
-    { input: 'src/index', name: 'index' },
-    { input: 'src/content-explorer/index', name: 'content-explorer/index' },
-    { input: 'src/content-preview/index', name: 'content-preview/index' }
+    { input: 'src/', outDir: 'dist/esm-node', ext: 'mjs' }
   ],
   hooks: {
     'rollup:options': async (ctx, options) => {
       // @ts-ignore
       options.plugins.push(
-        Macros({
-          plugins: {
-            vue: Vue({
-              isProduction: false,
-              reactivityTransform: true
-            })
-          }
+        Vue({
+          isProduction: false,
+          reactivityTransform: true
         })
       );
 
@@ -54,6 +48,10 @@ export default defineBuildConfig({
         }
       ], []);
       await Promise.resolve();
+    },
+    'build:done': async () => {
+      await fs.remove(r('dist/esm-node/env.d.ts'));
+      await fs.writeFile(r('dist/index.d.ts'), 'export * from \'./esm-node\';\n', 'utf-8');
     }
   }
 });

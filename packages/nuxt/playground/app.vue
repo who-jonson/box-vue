@@ -3,6 +3,6 @@
 
 <template>
   <div>
-    Nuxt module playground!
+    <BoxUiPreview access-token="" value="" />
   </div>
 </template>
