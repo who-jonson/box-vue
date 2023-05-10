@@ -1,7 +1,7 @@
 {
   "name": "@whoj/box-icons",
   "type": "module",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "packageManager": "pnpm@8.3.1",
   "description": "Box Ui Elements (Icons) as Vue (2 & 3) Component",
   "keywords": [
