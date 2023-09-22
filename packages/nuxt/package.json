@@ -1,7 +1,7 @@
 {
   "name": "@whoj/box-nuxt",
   "type": "module",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.8",
   "packageManager": "pnpm@8.3.0",
   "description": "Nuxt Module for Box Ui Elements as Vue (2 & 3) Component",
   "keywords": [
