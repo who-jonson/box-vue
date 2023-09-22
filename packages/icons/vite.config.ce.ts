@@ -1,32 +1,19 @@
-import glob from 'fast-glob';
 import { defineConfig } from 'vite';
 import Vue from '@vitejs/plugin-vue';
-import ViteDts from 'vite-plugin-dts';
 import VueJsx from '@vitejs/plugin-vue-jsx';
 import type { OutputOptions } from 'rollup';
+import ViteDts from 'vite-plugin-dts';
 import { getExternals, makeBanner, r } from '../../scripts/utils';
-
-const entries = glob.sync(['*/*.{ts,tsx}'], {
-  absolute: false,
-  cwd: r('./src/icon/'),
-  ignore: ['*/*.ce.ts']
-}).reduce((entries, input) => ({
-  ...entries,
-  [input.substring(0, input.lastIndexOf('.'))]: `./src/icon/${input}`
-}), {
-  index: './src/index.ts',
-  resolvers: './src/resolvers.ts'
-});
 
 export default defineConfig(({ command, mode }) => {
   const isDev = (command === 'serve' || process.env.DEV || mode !== 'production');
   return {
     build: {
-      emptyOutDir: true,
-      outDir: 'dist',
+      emptyOutDir: false,
+      outDir: 'dist/ce',
       minify: !isDev,
       lib: {
-        entry: entries
+        entry: './src/index.ce.ts'
       },
       rollupOptions: {
         treeshake: true,
@@ -34,6 +21,7 @@ export default defineConfig(({ command, mode }) => {
         external: getExternals(),
         makeAbsoluteExternalsRelative: 'ifRelativeSource',
         output: (['es'] as const).map(format => outputOptions(format))
+
       },
       ssr: true
     },
@@ -50,10 +38,19 @@ export default defineConfig(({ command, mode }) => {
 
     plugins: [
       Vue({
-        isProduction: false,
-        reactivityTransform: true
+        customElement: true,
+        reactivityTransform: true,
+        template: {
+          compilerOptions: {
+            isCustomElement: tag => (tag.startsWith('Box') || tag.startsWith('box-'))
+          }
+        }
       }),
-      VueJsx(),
+
+      VueJsx({
+        isCustomElement: tag => (tag.startsWith('Box') || tag.startsWith('box-'))
+      }),
+
       ViteDts({
         cleanVueFileName: true,
         skipDiagnostics: true,
@@ -65,7 +62,7 @@ export default defineConfig(({ command, mode }) => {
           composite: false,
           customConditions: ['develop']
         },
-        exclude: [
+        include: [
           'src/**/*.ce.ts'
         ]
       })
@@ -79,23 +76,24 @@ export default defineConfig(({ command, mode }) => {
   };
 });
 
-function outputOptions(format: 'cjs' | 'es' = 'es'): OutputOptions {
+function outputOptions(format: 'es' | 'iife' = 'es'): OutputOptions {
   return {
     format,
-    exports: 'named',
+    exports: format === 'es' ? 'named' : 'auto',
     banner: makeBanner(),
     generatedCode: {
       constBindings: true
     },
+    name: 'VueBoxIcons',
     minifyInternalExports: false,
+    chunkFileNames: `_shared/[name].${format === 'es' ? 'js' : 'iife.js'}`,
+    entryFileNames: `[name].${format === 'es' ? 'js' : 'iife.js'}`,
+    manualChunks: (id) => {
+      if (/src\/([\w-]+)\/([\w-]+)\//.test(id)) {
+        return /src\/([\w-]+)\/([\w-]+)\//.exec(id)[2];
+      }
+    },
     sourcemap: true
-    // chunkFileNames: `_shared/[name].${format === 'es' ? 'mjs' : 'cjs'}`,
-    // entryFileNames: `[name].${format === 'es' ? 'mjs' : 'cjs'}`,
-    // manualChunks: (id) => {
-    //   if (/src\/([\w-]+)\//.test(id)) {
-    //     return /src\/([\w-]+)\//.exec(id)[1];
-    //   }
-    // }
   };
 }
 

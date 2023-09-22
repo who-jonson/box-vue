@@ -3,7 +3,7 @@ import glob from 'fast-glob';
 import { fileURLToPath } from 'url';
 import MagicString from 'magic-string';
 import { basename, dirname, resolve } from 'path';
-import { hasProperty, kebabCase, objectEntries, parallel } from '@whoj/utils';
+import { capitalize, hasProperty, kebabCase, objectEntries, parallel } from '@whoj/utils';
 
 // import '../../../node_modules/box-ui-elements/src/icon/content/FileBoxNote32.tsx';
 
@@ -92,10 +92,39 @@ async function main() {
   await parallel(
     objectEntries(iconsExports),
     async ([_type, exports]) => {
-      let code = exports.reduce((code, exp) => `${code}export { default as ${exp} } from './${exp}';\n`, '');
+      // let code = exports.reduce((code, exp) => `${code}export { default as ${exp} } from './${exp}';\n`, '');
+
+      // const [code, codeCE]: string[] = [];
+      const definedCE: string[] = [];
+      const definedCETypes: string[] = [
+        'declare module \'vue\' {',
+        '  export interface GlobalComponents {'
+      ];
+
+      let [code, codeCE] = exports.reduce(
+        ([code, codece], exp) => {
+          definedCE.push(`export const BI${_type === 'content' ? '' : capitalize(_type)}${exp} = defineCustomElement(_${exp});`);
+          definedCETypes.push(`    'BI${_type === 'content' ? '' : capitalize(_type)}${exp}': typeof BI${_type === 'content' ? '' : capitalize(_type)}${exp};`);
+
+          return [
+            `${code}export { default as ${exp} } from './${exp}';\n`,
+            `${codece}import _${exp} from './${exp}';\n`
+          ];
+        },
+        ['', 'import { defineCustomElement } from \'vue\';\n']);
 
       code += '';
+      codeCE += '\n';
+      codeCE += definedCE.join('\n');
+      codeCE += '\n\n';
+
+      definedCETypes.push('  }', '}');
+
+      codeCE += definedCETypes.join('\n');
+      codeCE += '\n';
+
       await fs.writeFile(r(`./src/icon/${_type}/index.ts`), code, 'utf-8');
+      await fs.writeFile(r(`./src/icon/${_type}/index.ce.ts`), codeCE, 'utf-8');
     }
   );
 
