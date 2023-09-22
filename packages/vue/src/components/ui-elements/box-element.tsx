@@ -3,9 +3,8 @@ import type {
   ObjectEmitsOptions,
   PropType
 } from 'vue-demi';
-import { capitalize } from '@vue/shared';
-import { objectKeys, template } from '@whoj/utils';
 import { useVModel } from '@vueuse/core';
+import { objectKeys, template } from '@whoj/utils';
 import { defineComponent, readonly, watchEffect } from 'vue-demi';
 
 import { BoxUiElements, useBoxElement } from './useBoxElement';
@@ -148,7 +147,7 @@ class BoxElementFactory<El extends BaseEl<Opt, Evt>, Opt extends object, Evt ext
           }
         });
 
-        return () => (<div { ...attrs } id={id} class="box-ui-element-wrapper"></div>);
+        return () => (<div { ...attrs } id={id} className="box-ui-element-wrapper"></div>);
       }
     });
   }

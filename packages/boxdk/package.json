@@ -1,0 +1,74 @@
+{
+  "name": "@whoj/boxdk",
+  "description": "Typed version of [Box Clientside SDK]",
+  "version": "1.0.0-beta.7",
+  "license": "MIT",
+  "author": {
+    "name": "Jonson B.",
+    "email": "www.jbc.bd@gmail.com"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "homepage": "https://github.com/who-jonson/box-vue#readme",
+  "repository": {
+    "url": "https://github.com/who-jonson/box-vue",
+    "type": "git",
+    "directory": "packages/boxdk"
+  },
+  "bugs": {
+    "url": "https://github.com/who-jonson/box-vue/issues"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/boxdk.d.ts",
+      "node": {
+        "import": "./dist/boxdk.mjs",
+        "require": "./dist/boxdk.cjs"
+      },
+      "browser": "./dist/boxdk.esm-browser.js"
+    },
+    "./*": [
+      "./dist/*",
+      "./dist/*.d.ts"
+    ]
+  },
+  "main": "./dist/boxdk.cjs",
+  "module": "./dist/boxdk.mjs",
+  "types": "./dist/boxdk.d.ts",
+  "iife": "./dist/boxdk.iife.js",
+  "unpkg": "./dist/boxdk.iife.js",
+  "jsdelivr": "./dist/boxdk.iife.js",
+  "typesVersions": {
+    "<=4.9": {
+      "*": [
+        "./dist/*",
+        "./*"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite --host",
+    "build": "rm -rf dist && run-p build:types build:lib",
+    "build:lib": "rollup --config rollup.config.mjs",
+    "build:types": "tsc --declaration --emitDeclarationOnly --outDir ./dist",
+    "prepublishOnly": "pnpm run build && rm dist/index.d.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "release": "bumpp package.json --commit --push --tag && pnpm publish --access public"
+  },
+  "dependencies": {
+    "@whoj/utils-core": "^1.8.0",
+    "rusha": "^0.8.14",
+    "whatwg-fetch": "^3.6.2"
+  },
+  "devDependencies": {
+    "@types/rusha": "^0.8.0"
+  }
+}
